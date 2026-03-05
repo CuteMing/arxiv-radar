@@ -54,13 +54,16 @@ jobs:
           LANGUAGE: ${{ vars.LANGUAGE }}
           LAST_TIME: ${{ env.LAST_TIME }}
         run: |
+          uv run main.py
+
+      - name: Install dependencies
+        run: |
           # 先卸载可能已编译的版本
           uv pip uninstall llama-cpp-python
           # 重新安装，禁用原生优化
           CMAKE_ARGS="-DLLAMA_NATIVE=OFF -DLLAMA_AVX=OFF -DLLAMA_AVX2=OFF" \
             uv pip install llama-cpp-python --force-reinstall --no-cache
           uv pip install -e .
-          uv run main.py
        
       - name: Update keep-alive file
         run: |
